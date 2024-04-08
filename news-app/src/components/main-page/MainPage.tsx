@@ -12,9 +12,15 @@ import CategoryIcon from '@mui/icons-material/Category';
 import NewsByCategory from '../news/NewsByCategory';
 import UserSettings from '../user/UserSettings';
 import CreateNew from '../news/CreateNew';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router';
 
 const MainPage = () => {
     const [value, setValue] = React.useState('Inicio');
+
+    const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+    const navigate = useNavigate();
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -26,11 +32,16 @@ const MainPage = () => {
                 return <AllNews />;
             case 'Crear':
                 return <CreateNew />
-            case 'Configuraciones':
-                return <UserSettings />
             default:
                 return null;
         }
+    }
+
+    const handleLogout = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        removeCookie('jwt');
+        navigate('/');
     }
 
     const focusColor='#a8a39d';
@@ -52,10 +63,10 @@ const MainPage = () => {
                         sx={{ color: value === 'Crear' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
                     <BottomNavigationAction
-                        label="Configuraciones"
-                        value="Configuraciones"
-                        icon={<LocationOnIcon />}
-                        sx={{ color: value === 'Configuraciones' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
+                        label="Logout"
+                        value="Logout"
+                        onClick={handleLogout}
+                        icon={<LogoutIcon />}
                     />
                 </BottomNavigation>
             </div>

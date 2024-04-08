@@ -47,7 +47,8 @@ const CreateNew = () => {
         setSelectedFile(file);
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
             
             const bodyWithNewlines = body.replace(/\n/g, '<br>')

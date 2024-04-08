@@ -61,16 +61,15 @@ const LoginForm = () => {
 
                 navigate('/index');
             } else {
-                setResponseMessage('Ocurrió un error al iniciar sesión');
+                setResponseMessage('Ocurrió un error al iniciar sesión.');
             }
         } catch (error: any) {
-            console.error(error);
+            console.error('Login error', error);
             setSubmitted(true);
-            if (error.response) {
+            if (axios.isAxiosError(error)) {
                 setResponseMessage('Usuario o contraseña incorrecta, verifica tus credenciales');    
             }
-            setResponseMessage('Ocurrió un error al iniciar sesión');
-            
+            setResponseMessage('Usuario o contraseña incorrecta, verifica tus credenciales');    
         }
 
     }
@@ -91,7 +90,7 @@ const LoginForm = () => {
     return (
         <Grid margin={5} container>
             <Grid item xs={1} xl={3}>
-                <img src="" alt="" />
+                
             </Grid>
             <Grid item xs={10} xl={6}>
             <Box className='content-center'>
@@ -123,7 +122,6 @@ const LoginForm = () => {
                         </Typography>
                         <Typography variant='body2'>Ingresa tus credenciales para iniciar sesión</Typography>
                     </Box>
-                    <form noValidate onSubmit={handleSubmit} autoComplete='off'>
                         <TextField
                         autoFocus 
                         fullWidth 
@@ -170,6 +168,7 @@ const LoginForm = () => {
                         type='submit'
                         size='large'
                         variant='contained'
+                        onClick={handleSubmit}
                         sx={{ marginBottom: 7 }}
                         >
                         Iniciar Sesión
@@ -185,7 +184,6 @@ const LoginForm = () => {
                         </Typography>
                         </Box>
                         
-                    </form>
                     </CardContent>
                 </Card>
                 </Box>

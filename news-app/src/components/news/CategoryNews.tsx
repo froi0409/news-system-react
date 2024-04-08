@@ -31,7 +31,7 @@ const CategoryNews = (props: any) => {
     return (
         <Grid style={{ marginBottom: 5 }} container spacing={5}>
             {news.map((newEntity:any) => (
-                <Grid item xs={4}>
+                <Grid item xs={12} md={6} xl={4}>
                     <NewCard newEntity={newEntity} />
                 </Grid>
             ))  

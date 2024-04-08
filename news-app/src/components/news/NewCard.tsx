@@ -31,13 +31,13 @@ const NewCard = (props: any) => {
     const prefixedImage: any = addPrefixtToBase64(newEntity.imagePath);
     return (
         <>
-            <Card sx={{ maxWidth: 345 }}>
+            <Card sx={{ maxWidth: '100%', height: '375px' }}>
                 <CardMedia
                     sx={{ height: 140 }}
                     image={prefixedImage}
                     title="new image"
                 />
-                <CardContent>
+                <CardContent sx={{ height: '150px', overflowY: 'auto', msOverflowStyle: 'none' }}>
                     <Typography gutterBottom variant="h5" component="div">
                     {newEntity.title}
                     </Typography>

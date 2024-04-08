@@ -84,6 +84,7 @@ const ResetPassword = () => {
                 if (response.status === 201) {
                     setErrorResponse(false);
                     setResponseMessage('La contraseña ha sido actualizada con éxito');    
+                    console.log('contraseña actualizada con éxito');
                 } else {
                     setErrorResponse(true);
                     setResponseMessage('Ocurrió un error al intentar actualizar la contraseña');    

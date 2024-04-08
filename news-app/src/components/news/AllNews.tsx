@@ -20,9 +20,9 @@ const AllNews = () => {
     }, []);
 
     return (
-        <Grid style={{ margin: 25 }} container spacing={5}>
+        <Grid style={{ padding: 25 }} container spacing={5}>
             {news.map((newEntity:any) => (
-                <Grid item xs={4}>
+                <Grid item xs={12} md={6} xl={3}>
                     <NewCard newEntity={newEntity} />
                 </Grid>
             ))  
