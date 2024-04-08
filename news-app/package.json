@@ -17,6 +17,7 @@
     "axios": "^1.6.8",
     "install": "^0.13.0",
     "js-cookies": "^1.0.4",
+    "jwt-decode": "^4.0.0",
     "mdi-material-ui": "^7.8.0",
     "npm": "^10.5.1",
     "react": "^18.2.0",

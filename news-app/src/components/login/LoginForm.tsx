@@ -90,10 +90,10 @@ const LoginForm = () => {
 
     return (
         <Grid margin={5} container>
-            <Grid item xs={1} xl={4}>
-
+            <Grid item xs={1} xl={3}>
+                <img src="" alt="" />
             </Grid>
-            <Grid item xs={12} xl={4}>
+            <Grid item xs={10} xl={6}>
             <Box className='content-center'>
                     <Card sx={{ zIndex: 1 }}>
                     <Grid>
@@ -185,7 +185,7 @@ const LoginForm = () => {
                 </Card>
                 </Box>
             </Grid>
-            <Grid item xs={1} xl={4}></Grid>
+            <Grid item xs={1} xl={3}></Grid>
         </Grid>
     )
 }

@@ -7,9 +7,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Newspaper } from '@mui/icons-material';
 import AllNews from '../news/AllNews';
+import CategoryIcon from '@mui/icons-material/Category';
+import NewsByCategory from '../news/NewsByCategory';
+import UserSettings from '../user/UserSettings';
 
 const MainPage = () => {
-    const [value, setValue] = React.useState('recents');
+    const [value, setValue] = React.useState('Inicio');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -19,29 +22,46 @@ const MainPage = () => {
         
     }
 
+    const renderComponent = () => {
+        switch (value) {
+            case 'Inicio':
+                return <AllNews />;
+            case 'Categorias':
+                return <NewsByCategory />
+            case 'Configuraciones':
+                return <UserSettings />
+            default:
+                return null;
+        }
+    }
+
+    const focusColor='#a8a39d';
+
     return (
         <>
             <div style={{ backgroundColor: '#8d7966', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <BottomNavigation style={{ backgroundColor: '#8d7966' }} sx={{ width: 500 }} value={value} onChange={handleChange}>
                     <BottomNavigationAction
-                        label="Home"
-                        value="Home"
-                        icon={<HomeIcon />}
+                        label="Inicio"
+                        value="Inicio"
+                        icon={<HomeIcon sx={{ color: value === 'Home' ? focusColor : 'inherit' }} />}
+                        sx={{ color: value === 'Inicio' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
                     <BottomNavigationAction
-                        label="Favorites"
-                        value="favorites"
+                        label="Categorias"
+                        value="Categorias"
                         icon={<FavoriteIcon />}
+                        sx={{ color: value === 'Categorias' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
                     <BottomNavigationAction
-                        label="Nearby"
-                        value="nearby"
+                        label="Configuraciones"
+                        value="Configuraciones"
                         icon={<LocationOnIcon />}
+                        sx={{ color: value === 'Configuraciones' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
-                    <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
                 </BottomNavigation>
             </div>
-            <AllNews />
+            {renderComponent()}
         </>
     );
 }

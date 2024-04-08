@@ -6,31 +6,36 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { useNavigate } from 'react-router-dom';
 
 const NewCard = (props: any) => {
+
+    const navigate = useNavigate();
 
     const newEntity = props.newEntity;
     
     const addPrefixtToBase64 = (imageData: any) => {
         const type: any = newEntity.imageType;
         if (type) {
-            return `data:image/${type.mime};base64,${imageData}`;
+            return `data:image/${type};base64,${imageData}`;
         } else {
             console.error(`${newEntity.id} no tiene una imagen válida`);
             return null;
         }
     }
 
-    const prefixedImage: any = addPrefixtToBase64(newEntity.imagePath);
-    console.log(prefixedImage);
+    const handleOnClick = () => { 
+        navigate(`/newComplete/${newEntity._id}`);
+    }
 
+    const prefixedImage: any = addPrefixtToBase64(newEntity.imagePath);
     return (
         <>
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     sx={{ height: 140 }}
                     image={prefixedImage}
-                    title="green iguana"
+                    title="new image"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
@@ -41,7 +46,7 @@ const NewCard = (props: any) => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">Leer más...</Button>
+                    <Button onClick={handleOnClick} size="small">Leer más...</Button>
                 </CardActions>
             </Card>
             
