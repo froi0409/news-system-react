@@ -5,34 +5,31 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import AllNews from './AllNews';
 
-interface NewInfo {
-    id: string,
-    title: string,
-    description: string,
-    body: string,
-    author: string,
-    publishDate: Date,
-    categories: Array<String>
-
-
-}
 
 const NewCard = (props: any) => {
 
     const newEntity = props.newEntity;
     
-    console.log(newEntity);
+    const addPrefixtToBase64 = (imageData: any) => {
+        const type: any = newEntity.imageType;
+        if (type) {
+            return `data:image/${type.mime};base64,${imageData}`;
+        } else {
+            console.error(`${newEntity.id} no tiene una imagen válida`);
+            return null;
+        }
+    }
+
+    const prefixedImage: any = addPrefixtToBase64(newEntity.imagePath);
+    console.log(prefixedImage);
 
     return (
         <>
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     sx={{ height: 140 }}
-                    image={newEntity.imagePath}
+                    image={prefixedImage}
                     title="green iguana"
                 />
                 <CardContent>
