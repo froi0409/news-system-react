@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+import { Textarea } from './utils'
 
 import { styled } from '@mui/system';
 
@@ -23,7 +24,6 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
-
 
 const CreateNew = () => {
 
@@ -89,6 +89,8 @@ const CreateNew = () => {
         }
     }
 
+    
+
     return (
         <Grid container spacing={5} style={{ marginTop: 20 }}>
             <Grid item xs={1} xl={3} />
@@ -150,7 +152,7 @@ const CreateNew = () => {
                                 </Button>
                             </Grid>
                             <Grid item xs={12}>
-                                <BaseTextareaAutosize required style={{ borderStyle: 'none', width: '100%' }} value={body} onChange={(e) => setBody(e.target.value)} aria-label="minimum height" minRows={3} placeholder="Cuerpo de la noticia" />
+                                <Textarea required style={{ borderStyle: 'none', width: '100%' }} value={body} onChange={(e) => setBody(e.target.value)} aria-label="minimum height" minRows={3} placeholder="Cuerpo de la noticia" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Grid container spacing={5} alignItems='center'>
