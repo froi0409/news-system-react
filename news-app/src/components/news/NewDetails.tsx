@@ -2,8 +2,6 @@ import { Grid } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 
@@ -18,6 +16,7 @@ export const NewDetails = (props: any) => {
     const [cookies] = useCookies(['jwt']);
     const [newDetails, setNewDetails] = useState(null) as any;
     const [category, setCategory] = useState('')
+    const [textWithBreaks, setTextWithBreaks] = useState('')
 
     const [prefixedImage, setPrefixedImage] = useState('');
     const { id } = useParams();
@@ -34,16 +33,20 @@ export const NewDetails = (props: any) => {
                 
                 setNewDetails(response.data);
                 
-                const type = newDetails.imageType;
-                if (type) {
-                    setPrefixedImage(`data:image/${type};base64,${newDetails.imagePath}`);
+                if (response.data.imageType) {
+                    const type = response.data.imageType;
+                    setPrefixedImage(`data:image/${type};base64,${response.data.imagePath}`);
                     console.log(prefixedImage);
                 }
 
-                if (newDetails.categories instanceof Array) {
-                    setCategory(newDetails.categories[0])
+                if (response.data.categories instanceof Array) {
+                    setCategory(response.data.categories[0])
                 } else {
-                    setCategory(newDetails.categories)
+                    setCategory(response.data.categories)
+                }
+
+                if (response.data.body) {
+                    setTextWithBreaks(response.data.body.replace(/\n/g, '<br>'));
                 }
             } catch (error) {
                 console.error(error);
@@ -55,6 +58,13 @@ export const NewDetails = (props: any) => {
 
     return (
         <Grid container spacing={5}>
+            <Grid item xs={1} xl={3} />
+            <Grid item xs={10} xl={6}>
+            <Button href='/index' variant="contained" style={{ backgroundColor: '#8d7966', marginTop: 20 }}>
+                VOLVER
+            </Button>
+            </Grid>
+            <Grid item xs={1} xl={3} />
             <Grid item xs={1} xl={3}></Grid>
             <Grid item xs={10} xl={6}>
                 <Paper elevation={4} style={{ padding: 20, marginTop: 20 }}>
@@ -85,9 +95,7 @@ export const NewDetails = (props: any) => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant='body1'>
-                                    {newDetails.body}
-                                </Typography>
+                                <Typography variant='body1' dangerouslySetInnerHTML={{ __html: textWithBreaks }} />
                             </Grid>
                         </Grid>
                     ) : (

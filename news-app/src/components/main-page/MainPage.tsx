@@ -3,6 +3,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FolderIcon from '@mui/icons-material/Folder';
 import HomeIcon from '@mui/icons-material/Home';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Newspaper } from '@mui/icons-material';
@@ -10,6 +11,7 @@ import AllNews from '../news/AllNews';
 import CategoryIcon from '@mui/icons-material/Category';
 import NewsByCategory from '../news/NewsByCategory';
 import UserSettings from '../user/UserSettings';
+import CreateNew from '../news/CreateNew';
 
 const MainPage = () => {
     const [value, setValue] = React.useState('Inicio');
@@ -18,16 +20,12 @@ const MainPage = () => {
         setValue(newValue);
     };
 
-    const handleClickMainPage = () => {
-        
-    }
-
     const renderComponent = () => {
         switch (value) {
             case 'Inicio':
                 return <AllNews />;
-            case 'Categorias':
-                return <NewsByCategory />
+            case 'Crear':
+                return <CreateNew />
             case 'Configuraciones':
                 return <UserSettings />
             default:
@@ -48,10 +46,10 @@ const MainPage = () => {
                         sx={{ color: value === 'Inicio' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
                     <BottomNavigationAction
-                        label="Categorias"
-                        value="Categorias"
-                        icon={<FavoriteIcon />}
-                        sx={{ color: value === 'Categorias' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
+                        label="Crear"
+                        value="Crear"
+                        icon={<BorderColorIcon sx={{ color: value === 'Home' ? focusColor : 'inherit' }} />}
+                        sx={{ color: value === 'Crear' ? focusColor : 'inherit', '&.Mui-selected': { color: focusColor } }}
                     />
                     <BottomNavigationAction
                         label="Configuraciones"

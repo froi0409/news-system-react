@@ -18,62 +18,39 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import axios from 'axios';
 // @ts-ignore
 import { useCookies } from 'react-cookie';
-import { Route } from 'react-router-dom'
+import { Route, useParams } from 'react-router-dom'
 
 import { useNavigate } from 'react-router-dom';
 
-
 interface State {
-    password: string
+    password: string,
+    passwordRepeat: string
     showPassword: boolean
+    showPasswordRepeat: boolean
 }
 
-const LoginForm = () => {
-
+const ResetPassword = () => {
+    
     const navigate = useNavigate();
 
     const [ cookies, setCookie ] = useCookies([ 'jwt' ]);
 
-    const [username, setUsername] = useState('');
+    const { username, token } = useParams();
+
+    const [usernameFinal, setUsernameFinal] = useState('');
+    const [tokenFinal, setTokenFinal] = useState('');
     const [values, setValues] = useState<State>({
         password: '',
-        showPassword: false
+        passwordRepeat: '',
+        showPassword: false,
+        showPasswordRepeat: false
     })
+
     const [responseMessage, setResponseMessage] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [errorResponse, setErrorResponse] = useState(true);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
 
-        const formData = {
-            username,
-            password: values.password
-        }
-
-        try {
-            const response = await axios.post(`http://localhost:4000/v1/user/login`, formData);
-            console.log(response);
-            setSubmitted(true);
-
-            if (response.status === 200) {
-                const token = response.data.token;
-                setCookie('jwt', `Bearer ${token}`);
-
-                navigate('/index');
-            } else {
-                setResponseMessage('Ocurrió un error al iniciar sesión');
-            }
-        } catch (error: any) {
-            console.error(error);
-            setSubmitted(true);
-            if (error.response) {
-                setResponseMessage('Usuario o contraseña incorrecta, verifica tus credenciales');    
-            }
-            setResponseMessage('Ocurrió un error al iniciar sesión');
-            
-        }
-
-    }
 
     const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value })
@@ -87,6 +64,43 @@ const LoginForm = () => {
         event.preventDefault()
     }
 
+    const handleClickShowPasswordRepeat = () => {
+        setValues({ ...values, showPassword: !values.showPasswordRepeat })
+    }
+
+    const handleSubmit = async () => {
+        if (values.password === values.passwordRepeat) {
+            try {
+                const formData = {
+                    username,
+                    token,
+                    newPassword: values.password
+                }
+
+                const response = await axios.put(`http://localhost:4000/v1/user/updatePasswordToken`, formData);
+                
+                setSubmitted(true);
+                
+                if (response.status === 201) {
+                    setErrorResponse(false);
+                    setResponseMessage('La contraseña ha sido actualizada con éxito');    
+                } else {
+                    setErrorResponse(true);
+                    setResponseMessage('Ocurrió un error al intentar actualizar la contraseña');    
+                    
+                }
+            } catch (error) {
+                console.error(error);
+                setErrorResponse(true);
+                setResponseMessage('Ocurrió un error al intentar actualizar la contraseña');    
+                    
+            }
+        } else {
+            setErrorResponse(true);
+            setSubmitted(true);
+            setResponseMessage('Las contraseñas deben de coincidir')
+        }
+    }
 
     return (
         <Grid margin={5} container>
@@ -97,7 +111,11 @@ const LoginForm = () => {
             <Box className='content-center'>
                     <Card sx={{ zIndex: 1 }}>
                     <Grid>
-                    {submitted && responseMessage !== '' && (
+                    {submitted && !errorResponse && responseMessage !== '' && (
+                        <Alert severity="success">{responseMessage}</Alert>    
+                    )
+                    }
+                    {submitted && errorResponse && responseMessage !== '' && (
                         <Alert severity="error">{responseMessage}</Alert>    
                     )
                     }
@@ -114,25 +132,16 @@ const LoginForm = () => {
                             fontSize: '1.5rem !important'
                         }}
                         >
-                        NewsSystem
+                        Restablecer Contraseña
                         </Typography>
                     </Box>
                     <Box sx={{ mb: 6 }}>
                         <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
                         Bienvenido a NewsSystem!
                         </Typography>
-                        <Typography variant='body2'>Ingresa tus credenciales para iniciar sesión</Typography>
+                        <Typography variant='body2'>Ingresa las contraseñas (deben coincidir)</Typography>
                     </Box>
-                    <form noValidate onSubmit={handleSubmit} autoComplete='off'>
-                        <TextField
-                        autoFocus 
-                        fullWidth 
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        id='username' 
-                        label='Usuario' 
-                        sx={{ marginBottom: 4 }} 
-                        />
+                        
                         <FormControl fullWidth>
                         <InputLabel htmlFor='auth-login-password'>Contraseña</InputLabel>
                         <OutlinedInput
@@ -156,36 +165,36 @@ const LoginForm = () => {
                             }
                         />
                         </FormControl>
-                        <Typography variant='body2'>
-                            <Link color="inherit" href='/forgotPassword'>
-                                Olvide mi contraseña
-                            </Link>
-                        </Typography>
-                        <Box
-                        sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-                        >
-                        </Box>
+                        <FormControl fullWidth>
+                        <InputLabel htmlFor='auth-login-password'>Contraseña</InputLabel>
+                        <OutlinedInput
+                            label='Password'
+                            value={values.passwordRepeat}
+                            id='auth-login-password'
+                            onChange={handleChange('passwordRepeat')}
+                            sx={{ marginBottom: 4 }}
+                            type={values.showPasswordRepeat ? 'text' : 'password'}
+                            
+                        />
+                        </FormControl>
                         <Button
                         fullWidth
                         type='submit'
                         size='large'
                         variant='contained'
+                        onClick={handleSubmit}
                         sx={{ marginBottom: 7 }}
                         >
-                        Iniciar Sesión
+                        Restablecer Contraseña
                         </Button>
                         <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        <Typography variant='body2' sx={{ marginRight: 2 }}>
-                            ¿Eres nuevo?
-                        </Typography>
                         <Typography variant='body2'>
-                            <Link color="inherit" href='/register'>
-                                Crear una cuenta
+                            <Link color="inherit" href='/'>
+                                Regresar a Inicio de Sesion
                             </Link>
                         </Typography>
                         </Box>
                         
-                    </form>
                     </CardContent>
                 </Card>
                 </Box>
@@ -195,4 +204,4 @@ const LoginForm = () => {
     )
 }
 
-export default LoginForm;
+export default ResetPassword;
